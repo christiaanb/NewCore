@@ -17,8 +17,11 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     CLaSH.DepCore.Term
+  exposed-modules:     CLaSH.DepCore.Environment
+                       CLaSH.DepCore.Term
+                       CLaSH.DepCore.Type
                        CLaSH.DepCore.Util
+
   -- other-modules:
 
   other-extensions:    DeriveFunctor
@@ -29,7 +32,8 @@ library
                        bound >= 1.0.3 && < 2,
                        comonad >= 4.2 && < 5,
                        prelude-extras >= 0.4 && < 0.5,
-                       ghc >= 7.8.3 && < 7.9
+                       ghc >= 7.8.3 && < 7.9,
+                       transformers >= 0.3.0.0
 
   hs-source-dirs:      src
 
