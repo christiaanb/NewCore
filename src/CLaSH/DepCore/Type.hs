@@ -4,8 +4,8 @@ import Bound                     (Scope (..))
 import Bound.Name                (Name, name, instantiate1Name)
 import Control.Comonad           (extract)
 
-import CLaSH.DepCore.Environment (Env (..), extendEnv)
-import CLaSH.DepCore.Term        (Binder (..), Term (..), Type)
+import CLaSH.DepCore.Environment (Env (..), declarePat, extendEnv)
+import CLaSH.DepCore.Term        (Alt (..), Binder (..), FastString, Term (..), Type)
 import CLaSH.DepCore.Util        (whnf)
 
 inferType :: Eq a => Show n => Show a
@@ -40,6 +40,15 @@ inferType env (Bind (Let ty tm) (Scope e2)) = instantiate1Name e1 (Scope t)
     env' = extendEnv inferType env (extract ty) (Just e1)
     t    = inferType env' e2
 
+inferType env (Case scrut alts) = undefined
+  where
+    sty           = inferType env scrut
+    (tc,params)    = inferTCon env sty
+
+    checkAlt (Alt n pat s) = undefined
+      where
+        decls = declarePat pat (TCon tc params)
+
 inferPi :: Eq a => Show n => Show a
         => Env n a
         -> Type n a
@@ -55,3 +64,11 @@ inferUniverse :: Eq a => Show n => Show a
 inferUniverse env ty = case whnf env ty of
                           Universe i -> i
                           ty'        -> error ("Type expected: " ++ show ty')
+
+inferTCon :: Eq a => Show n => Show a
+          => Env n a
+          -> Type n a
+          -> (FastString, [Type n a])
+inferTCon env ty = case whnf env ty of
+                     (TCon n params) -> (n,params)
+                     ty'             -> error ("TCon expected: " ++ show ty')

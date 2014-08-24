@@ -25,3 +25,5 @@ extendEnv inferType env@(Env ctx defs) bType bTerm = Env ctx' defs'
     defs' (B _)       = Nothing
     defs' (F (Var x)) = fmap (F . Var) <$> defs x
     defs' (F tm)      = Just (F . Var <$> tm)
+
+declarePat  = undefined
